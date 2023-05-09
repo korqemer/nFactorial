@@ -8,6 +8,8 @@ class FireBoy (pygame.sprite.Sprite):
         self.image.fill('red')
         self.rect = self.image.get_rect(topleft = pos)
 
+
+
         #movement
         self.jump_speed = -16
         self.gravity = 0.8
