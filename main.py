@@ -10,7 +10,10 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 level = Level(level_map, screen)
 
-while True:
+
+pygame.display.set_caption("Fireboy and Watergirl")
+running = True
+while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

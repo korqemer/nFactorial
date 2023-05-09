@@ -7,8 +7,6 @@ class FireBoy (pygame.sprite.Sprite):
         self.image = pygame.image.load("graphics/1.png").convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
 
-
-
         #movement
         self.jump_speed = -10
         self.gravity = 0.8
@@ -36,7 +34,6 @@ class FireBoy (pygame.sprite.Sprite):
 
     def update(self):
         self.get_input()
-        self.rect.x += self.direction.x * self.speed
 
 
 
