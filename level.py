@@ -70,16 +70,16 @@ class Level(pygame.sprite.Sprite):
                     tile = Tile((x,y), tile_size, cell)
                     self.tiles.add(tile)
 
-
-    def game_ender(self):
-        self.game_over = True
-
+    def reset(self):
         self.fireboy.sprite.rect.x = self.fireboy_x
         self.fireboy.sprite.rect.y = self.fireboy_y
 
         self.watergirl.sprite.rect.x = self.watergirl_x
         self.watergirl.sprite.rect.y = self.watergirl_y
 
+    def game_ender(self):
+        self.game_over = True
+        self.reset()
 
     def horizontal_movement_collision(self):
         fireboy = self.fireboy.sprite
@@ -93,7 +93,7 @@ class Level(pygame.sprite.Sprite):
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(fireboy.rect):
-                if sprite.type == "X":
+                if sprite.type == "X" or sprite.type == "A":
                     if fireboy.direction.x < 0:
                         fireboy.rect.left = sprite.rect.right
                     elif fireboy.direction.x > 0:
@@ -116,7 +116,7 @@ class Level(pygame.sprite.Sprite):
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(watergirl.rect):
-                if sprite.type == "X":
+                if sprite.type == "X" or sprite.type == "B":
                     if watergirl.direction.x < 0:
                         watergirl.rect.left = sprite.rect.right
                     elif watergirl.direction.x > 0:
@@ -128,12 +128,8 @@ class Level(pygame.sprite.Sprite):
 
     def is_success(self):
         self.total_success = self.watergirl_success and self.fireboy_success
-        self.fireboy.sprite.rect.x = self.fireboy_x
-        self.fireboy.sprite.rect.y = self.fireboy_y
-
-        self.watergirl.sprite.rect.x = self.watergirl_x
-        self.watergirl.sprite.rect.y = self.watergirl_y
-
+        if self.total_success:
+            self.reset()
 
     def vertical_movement_collision(self):
         fireboy = self.fireboy.sprite

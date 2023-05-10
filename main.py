@@ -176,5 +176,6 @@ while True:
         screen.blit(congrts_text, congrts_rect)
         screen.blit(menu_buttom, menu_rect)
 
+
     pygame.display.update()
     clock.tick(60)
