@@ -130,7 +130,9 @@ class Level(pygame.sprite.Sprite):
         self.total_success = self.watergirl_success and self.fireboy_success
         if self.total_success:
             self.reset()
-            print("Help")
+            self.watergirl_success = False
+            self.fireboy_success = False
+
 
     def vertical_movement_collision(self):
         fireboy = self.fireboy.sprite
