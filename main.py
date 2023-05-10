@@ -118,6 +118,7 @@ while True:
             if state == 4 or state == 5 or state == 6:
                 state = 3
 
+    # states
     if which_level == 1:
         if level.total_success:
             state = 6
