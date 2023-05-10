@@ -80,8 +80,18 @@ class Level(pygame.sprite.Sprite):
         self.watergirl.sprite.rect.x = self.watergirl_x
         self.watergirl.sprite.rect.y = self.watergirl_y
 
+    def is_success(self):
+        self.total_success = self.watergirl_success and self.fireboy_success
+
+        if self.total_success:
+            self.fireboy.sprite.rect.x = self.fireboy_x
+            self.fireboy.sprite.rect.y = self.fireboy_y
+
+            self.watergirl.sprite.rect.x = self.watergirl_x
+            self.watergirl.sprite.rect.y = self.watergirl_y
 
     def horizontal_movement_collision(self):
+
         fireboy = self.fireboy.sprite
         fireboy.rect.x += fireboy.direction.x * fireboy.speed
 
@@ -125,14 +135,6 @@ class Level(pygame.sprite.Sprite):
                     self.game_ender()
                 elif sprite.type == "O":
                     self.watergirl_success = True
-
-    def is_success(self):
-        self.total_success = self.watergirl_success and self.fireboy_success
-        self.fireboy.sprite.rect.x = self.fireboy_x
-        self.fireboy.sprite.rect.y = self.fireboy_y
-
-        self.watergirl.sprite.rect.x = self.watergirl_x
-        self.watergirl.sprite.rect.y = self.watergirl_y
 
 
     def vertical_movement_collision(self):
@@ -180,19 +182,19 @@ class Level(pygame.sprite.Sprite):
 
 
     def run(self):
+
         self.tiles.draw(self.display_surface)
-        self.fireboy.update()
-        self.watergirl.update()
 
         self.fireboy.draw(self.display_surface)
         self.watergirl.draw(self.display_surface)
 
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
+
+        self.fireboy.update()
+        self.watergirl.update()
+
         self.is_success()
-
-
-
 
 
 
