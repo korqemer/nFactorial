@@ -23,4 +23,8 @@ class Tile(pygame.sprite.Sprite):
         if type == "O":
             self.image = pygame.image.load("graphics/fire_door.png").convert_alpha()
             self.rect = self.image.get_rect(topleft=pos)
+        if type == "E":
+            self.image = pygame.image.load("graphics/fire_door.png").convert_alpha()
+            self.rect = self.image.get_rect(topleft=pos)
+
 
