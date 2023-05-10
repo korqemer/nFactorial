@@ -7,6 +7,7 @@ class WaterGirl (pygame.sprite.Sprite):
         self.image = pygame.image.load("graphics/2.png").convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
 
+
         #movement
         self.jump_speed = -10
         self.gravity = 0.8

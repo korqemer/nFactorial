@@ -17,3 +17,10 @@ class Tile(pygame.sprite.Sprite):
         if type == "Y":
             self.image = pygame.image.load("graphics/poison.png").convert_alpha()
             self.rect = self.image.get_rect(topleft=pos)
+        if type == "U":
+            self.image = pygame.image.load("graphics/water_door.png").convert_alpha()
+            self.rect = self.image.get_rect(topleft=pos)
+        if type == "O":
+            self.image = pygame.image.load("graphics/fire_door.png").convert_alpha()
+            self.rect = self.image.get_rect(topleft=pos)
+
