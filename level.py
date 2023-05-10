@@ -3,12 +3,13 @@ from tiles import Tile
 from settings import tile_size, screen_width, screen_height
 from fireboy import FireBoy
 from watergirl import WaterGirl
-from water_bricks import WaterBricks
-from fire_bricks import FireBricks
+
+
 
 class Level(pygame.sprite.Sprite):
 
     def __init__(self, level_data, surface):
+        super().__init__()
         self.display_surface = surface
         self.setup_level(level_data)
 
@@ -16,8 +17,6 @@ class Level(pygame.sprite.Sprite):
         self.tiles = pygame.sprite.Group()
         self.fireboy = pygame.sprite.GroupSingle()
         self.watergirl = pygame.sprite.GroupSingle()
-        self.waterbricks = pygame.sprite.Group()
-        self.firebricks = pygame.sprite.Group()
 
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
@@ -25,7 +24,7 @@ class Level(pygame.sprite.Sprite):
                 y = row_index * tile_size
                 # ordinary bricks
                 if cell == "X":
-                    tile = Tile((x, y), tile_size)
+                    tile = Tile((x, y), tile_size, cell)
                     self.tiles.add(tile)
                 # fireboy
                 if cell == "F":
@@ -37,14 +36,17 @@ class Level(pygame.sprite.Sprite):
                     self.watergirl.add(waterGirlSprite)
                 # water bricks
                 if cell == "B":
-                    waterBricksSprite = WaterBricks((x,y), tile_size)
-                    self.waterbricks.add(waterBricksSprite)
-
+                    tile = Tile((x, y), tile_size, cell)
+                    self.tiles.add(tile)
                 # fire bricks
                 if cell == "A":
-                    fireBricksSprite = FireBricks((x,y), tile_size)
-                    self.firebricks.add(fireBricksSprite)
+                    tile = Tile((x, y), tile_size, cell)
+                    self.tiles.add(tile)
 
+                #poison bricks
+                if cell == "Y":
+                    tile = Tile((x, y), tile_size, cell)
+                    self.tiles.add(tile)
 
 
     def horizontal_movement_collision(self):
@@ -53,30 +55,28 @@ class Level(pygame.sprite.Sprite):
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(fireboy.rect):
-                if fireboy.direction.x < 0:
-                    fireboy.rect.left = sprite.rect.right
-                elif fireboy.direction.x > 0:
-                    fireboy.rect.right = sprite.rect.left
+                if sprite.type == "X":
+                    if fireboy.direction.x < 0:
+                        fireboy.rect.left = sprite.rect.right
+                    elif fireboy.direction.x > 0:
+                        fireboy.rect.right = sprite.rect.left
+                elif sprite.type == "B" or sprite.type == "Y":
+                    self.game_ender()
 
         watergirl = self.watergirl.sprite
         watergirl.rect.x += watergirl.direction.x * watergirl.speed
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(watergirl.rect):
-                if watergirl.direction.x < 0:
-                    watergirl.rect.left = sprite.rect.right
-                elif watergirl.direction.x > 0:
-                    watergirl.rect.right = sprite.rect.left
+                if sprite.type == "X":
+                    if watergirl.direction.x < 0:
+                        watergirl.rect.left = sprite.rect.right
+                    elif watergirl.direction.x > 0:
+                        watergirl.rect.right = sprite.rect.left
 
-        for sprite in self.waterbricks.sprites():
-            if fireboy.rect.colliderect(sprite.rect):
-                print("water")
+                elif sprite.type == "A" or sprite.type == "Y":
+                    self.game_ender()
 
-
-        for sprite in self.firebricks.sprites():
-            if watergirl.rect.colliderect(sprite.rect):
-                print("lava")
-              
 
     def vertical_movement_collision(self):
         fireboy = self.fireboy.sprite
@@ -84,51 +84,48 @@ class Level(pygame.sprite.Sprite):
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(fireboy.rect):
-                if fireboy.direction.y > 0:
-                    fireboy.rect.bottom = sprite.rect.top
-                    fireboy.direction.y = 0
-                elif fireboy.direction.y < 0:
-                    fireboy.rect.top = sprite.rect.bottom
-                    fireboy.direction.y = 0
-
+                if sprite.type == "X":
+                    if fireboy.direction.y > 0:
+                        fireboy.rect.bottom = sprite.rect.top
+                        fireboy.direction.y = 0
+                    elif fireboy.direction.y < 0:
+                        fireboy.rect.top = sprite.rect.bottom
+                        fireboy.direction.y = 0
+                elif sprite.type == "B" or sprite.type == "Y":
+                    self.game_ender()
 
         watergirl = self.watergirl.sprite
         watergirl.apply_gravity()
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(watergirl.rect):
-                if watergirl.direction.y > 0:
-                    watergirl.rect.bottom = sprite.rect.top
-                    watergirl.direction.y = 0
-                elif watergirl.direction.y < 0:
-                    watergirl.rect.top = sprite.rect.bottom
-                    watergirl.direction.y = 0
+                if sprite.type == "X":
+                    if watergirl.direction.y > 0:
+                        watergirl.rect.bottom = sprite.rect.top
+                        watergirl.direction.y = 0
+                    elif watergirl.direction.y < 0:
+                        watergirl.rect.top = sprite.rect.bottom
+                        watergirl.direction.y = 0
+                elif sprite.type == "A" or sprite.type == "Y":
+                    self.game_ender()
 
-        for sprite in self.waterbricks.sprites():
-            if sprite.rect.colliderect(fireboy.rect):
-                print("water")
-
-
-        for sprite in self.firebricks.sprites():
-            if sprite.rect.colliderect(watergirl.rect):
-                print("lava")
-
-
+    def game_ender(self):
+        # problem with returning to menu
+        pygame.quit()
+        exit()
 
     def run(self):
         self.tiles.draw(self.display_surface)
-
         self.fireboy.update()
         self.watergirl.update()
 
         self.fireboy.draw(self.display_surface)
         self.watergirl.draw(self.display_surface)
 
-        self.waterbricks.draw(self.display_surface)
-        self.firebricks.draw(self.display_surface)
-
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
+
+
 
 
 

@@ -1,13 +1,13 @@
 level_map = [
-'                  ',
 '     Q     E      ',
 '               D T',
 '   XXXXXXXXXXXXXXX',
 '                  ',
-'XX    Y           ',
-'XXXXXXXXXXX       ',
-'XX        XXX     ',
-'XXXX        XX    ',
+'XX                ',
+'XXX               ',
+'XXXXXXYXXXX       ',
+'XX         XX     ',
+'XX           XX   ',
 ' FW             XX',
 'XXXXXAXXXBXXXXXXXX',
 '                  ']
